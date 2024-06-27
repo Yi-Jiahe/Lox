@@ -1,0 +1,3 @@
+if (true) print "if true";
+if (false) print "if false";
+if (false) print "if false"; else print "if false; else";
