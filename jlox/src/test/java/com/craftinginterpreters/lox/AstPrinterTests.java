@@ -8,6 +8,17 @@ public class AstPrinterTests {
   private final AstPrinter astPrinter = new AstPrinter();
 
   @Test
+  public void visitVariableExprTest() {
+    String expected = "a";
+
+    Expr variableExpr = new Expr.Variable(
+        new Token(TokenType.IDENTIFIER, "a", null, 1)
+    );
+
+    assertEquals(expected, astPrinter.print(variableExpr));
+  }
+
+  @Test
   public void visitAssignExprTest() {
     String expected = "(def a 1)";
 
