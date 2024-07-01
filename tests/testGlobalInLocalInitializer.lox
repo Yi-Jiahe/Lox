@@ -1,0 +1,13 @@
+/* Resolving and Binding | Challenges
+2. How do other languages you know handle local variables that refer to the same name in their initializer, like:
+*/
+var a = "outer";
+{
+  var a = a;
+}
+/*
+This is treated as an error by the Resolver based on the justification that shadowing is rare and often an error.
+Perhaps that is true and allowing it would make actual mistakes harder to catch, but this seems like it might be useful.
+For example you had a counter for a while loop which you want to reset once the loop is done and really want to use i as the identifier.
+In Python there's no declaration, so its pointless, but the result would be overwriting the value of the parent.
+*/
