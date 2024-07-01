@@ -1,11 +1,31 @@
 package com.craftinginterpreters.lox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class AstPrinterTests {
   private final AstPrinter astPrinter = new AstPrinter();
+
+  @Test
+  public void visitCallExprTest() {
+    String expected = "(add 1 2 3)";
+
+    List<Expr> arguments = new ArrayList<>();
+    arguments.add(new Expr.Literal(1));
+    arguments.add(new Expr.Literal(2));
+    arguments.add(new Expr.Literal(3));
+    Expr callExpr = new Expr.Call(
+      new Expr.Literal("add"),
+      new Token(TokenType.RIGHT_PAREN, ")", null, 1),
+      arguments
+    );
+
+    assertEquals(expected, astPrinter.print(callExpr));
+  }
 
   @Test
   public void visitLogicalExprTest() {
