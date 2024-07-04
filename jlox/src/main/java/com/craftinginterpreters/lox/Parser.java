@@ -61,7 +61,7 @@ class Parser {
   block          → "{" declaration* "}" ;
 
   expression     → assignment ;
-  assignment     → IDENTIFIER "=" assignment
+  assignment     → ( call "." )? IDENTIFIER "=" assignment
                  | logic_or ;
   logic_or       → logic_and ( "or" logic_and )* ;
   logic_and      → equality ( "and" equality )* ;
@@ -70,7 +70,7 @@ class Parser {
   term           → factor ( ( "-" | "+" ) factor )* ;
   factor         → unary ( ( "/" | "*" ) unary )* ;
   unary          → ( "!" | "-" ) unary | call ;
-  call           → primary ( "(" arguments? ")" )* ;
+  call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
   primary        → NUMBER | STRING | "true" | "false" | "nil"
                  | "(" expression ")"
                  | IDENTIFIER ;
@@ -262,6 +262,9 @@ class Parser {
       if (expr instanceof Expr.Variable) {
         Token name = ((Expr.Variable)expr).name;
         return new Expr.Assign(name, value);
+      } else if (expr instanceof Expr.Get) {
+        Expr.Get get = (Expr.Get)expr;
+        return new Expr.Set(get.object, get.name, value);
       }
 
       error(equals, "Invalid assignment target."); 
@@ -375,6 +378,10 @@ class Parser {
     while (true) { 
       if (match(LEFT_PAREN)) {
         expr = finishCall(expr);
+      } else if (match(DOT)) {
+        Token name = consume(IDENTIFIER,
+            "Expect property name after '.'.");
+        expr = new Expr.Get(expr, name);
       } else {
         break;
       }

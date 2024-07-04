@@ -28,6 +28,18 @@ public class AstPrinterTests {
   }
 
   @Test
+  public void visitGetExprTest() {
+    String expected = "(get instance name)";
+
+    Expr getExpr = new Expr.Get(
+        new Expr.Literal("instance"),
+        new Token(TokenType.IDENTIFIER, "name", null, 1)
+    );
+
+    assertEquals(expected, astPrinter.print(getExpr));
+  }
+
+  @Test
   public void visitLogicalExprTest() {
     String expected = "(or nil 1)";
 
@@ -38,6 +50,19 @@ public class AstPrinterTests {
     );
 
     assertEquals(expected, astPrinter.print(logicalExpr));
+  }
+
+  @Test
+  public void visitSetExprTest() {
+    String expected = "(set instance name value)";
+
+    Expr setExpr = new Expr.Set(
+        new Expr.Literal("instance"),
+        new Token(TokenType.IDENTIFIER, "name", null, 1),
+        new Expr.Literal("value")
+    );
+
+    assertEquals(expected, astPrinter.print(setExpr));
   }
 
   @Test
